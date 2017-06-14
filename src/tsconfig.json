@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true,
+    "strictNullChecks": false,
+    "sourceMap": true,
+    "lib": [
+      "dom",
+      "es5",
+      "es6",
+      "scripthost"
+    ],
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "outDir": "../out",
+    "rootDir": "."
+  },
+  "exclude": [
+    "../node_modules"
+  ]
+}

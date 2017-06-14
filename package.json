@@ -1,0 +1,25 @@
+{
+  "name": "microservice-playground",
+  "version": "1.0.0",
+  "main": "out/index.js",
+  "scripts": {
+    "build": "tsc -p src",
+    "coverage": "nyc -a --eager -n 'out/**/*.js' -n 'src/**/*.ts' -r json -r html yarn test",
+    "lint": "tslint 'src/**/*.ts'",
+    "lint-fix": "yarn lint -- --fix",
+    "test": "mocha --bail -u tdd --timeout 999999 --colors 'out/**/*.test.js'"
+  },
+  "pre-commit": [
+    "lint"
+  ],
+  "author": "makepost <makepost@firemail.cc>",
+  "license": "MIT",
+  "devDependencies": {
+    "expect": "^1.20.2",
+    "mocha": "^3.4.2",
+    "nyc": "^11.0.2",
+    "pre-commit": "^1.2.2",
+    "tslint": "^5.4.3",
+    "typescript": "^2.3.4"
+  }
+}
