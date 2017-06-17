@@ -7,8 +7,30 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
-      "program": "${workspaceRoot}/out/index.js"
+      "name": "Launch Arbitration Service",
+      "program": "${workspaceRoot}/bin/arbitrationService.js",
+      "protocol": "inspector" // ES6 proxy support.
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Arbitration Admin",
+      "program": "${workspaceRoot}/bin/arbitrationAdmin.js",
+      "protocol": "inspector" // ES6 proxy support.
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Conversion Client",
+      "program": "${workspaceRoot}/bin/conversionClient.js",
+      "protocol": "inspector" // ES6 proxy support.
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Conversion Service",
+      "program": "${workspaceRoot}/bin/conversionService.js",
+      "protocol": "inspector" // ES6 proxy support.
     },
     {
       "type": "node",

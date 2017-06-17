@@ -32,6 +32,8 @@ Back end, in VS Code:
 
 * Wait until activity indicator in status bar disappears.
 
+* In debug tag, choose the launch task you want to debug.
+
 * Start with `F5`.
 ```
 

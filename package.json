@@ -15,7 +15,8 @@
   "author": "makepost <makepost@firemail.cc>",
   "license": "MIT",
   "dependencies": {
-    "cote": "^0.14.1"
+    "cote": "^0.14.1",
+    "reflect-metadata": "^0.1.10"
   },
   "devDependencies": {
     "expect": "^1.20.2",

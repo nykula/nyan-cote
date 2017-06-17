@@ -1,21 +1,38 @@
 // tslint:disable:max-classes-per-file
 
 declare module "cote" {
-    export class Requester {
-        constructor({ name }: { name: string })
+    export interface IProps {
+        key: string;
+        name: string;
+    }
 
-        public send(
-            { type }: { type: string },
-            onResponse: (response: any) => void,
-        ): void;
+    export class Publisher {
+        constructor({ key, name }: IProps)
+
+        public publish({ type }: { type: string }): void;
+    }
+
+    export class Requester {
+        constructor({ key, name }: IProps)
+
+        public send({ type }: { type: string }): Promise<any>;
     }
 
     export class Responder {
-        constructor({ name }: { name: string })
+        constructor({ key, name }: IProps)
 
         public on(
             type: string,
-            onRequest: (data: any, callback: (response: any) => void) => void,
+            onRequest: (data: any) => Promise<any>,
+        ): void;
+    }
+
+    export class Subscriber {
+        constructor({ key, name }: IProps)
+
+        public on(
+            type: string,
+            onEvent: (data: any) => void,
         ): void;
     }
 }
