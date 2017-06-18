@@ -3,10 +3,10 @@ import { getClassName } from "../getClassName";
 import { activatePublisher, getPublishers } from "./Publisher";
 
 /**
- * Injects a subscriber into a class decorated with `@SubscriberInjector()` for
+ * Injects a publisher into a class decorated with `@PublisherInjector()` for
  * every its property decorated with `@Publisher()`.
  */
-export function SubscriberInjector() {
+export function PublisherInjector() {
   return <T extends { new (...args: any[]): {} }>(constructor: T) => {
     return class extends constructor {
       public static displayName = getClassName(constructor);

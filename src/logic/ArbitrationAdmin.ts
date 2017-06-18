@@ -1,8 +1,8 @@
 import { Requester } from "../utils/Requester/Requester";
-import { ResponderInjector } from "../utils/Requester/ResponderInjector";
+import { RequesterInjector } from "../utils/Requester/RequesterInjector";
 import { ArbitrationService } from "./ArbitrationService";
 
-@ResponderInjector()
+@RequesterInjector()
 export class ArbitrationAdmin {
   @Requester()
   public arbitrationService: ArbitrationService;

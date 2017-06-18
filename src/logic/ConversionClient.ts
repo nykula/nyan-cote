@@ -1,8 +1,8 @@
 import { Requester } from "../utils/Requester/Requester";
-import { ResponderInjector } from "../utils/Requester/ResponderInjector";
+import { RequesterInjector } from "../utils/Requester/RequesterInjector";
 import { ConversionService } from "./ConversionService";
 
-@ResponderInjector()
+@RequesterInjector()
 export class ConversionClient {
   @Requester()
   public conversionService: ConversionService;

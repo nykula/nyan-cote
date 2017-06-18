@@ -1,11 +1,11 @@
 import { Publisher } from "../utils/Publisher/Publisher";
-import { SubscriberInjector } from "../utils/Publisher/SubscriberInjector";
+import { PublisherInjector } from "../utils/Publisher/PublisherInjector";
 import { RequestHandler } from "../utils/Responder/RequestHandler";
 import { Responder } from "../utils/Responder/Responder";
 import { ArbitrationSubscriber } from "./ArbitrationSubscriber";
 
 @Responder()
-@SubscriberInjector()
+@PublisherInjector()
 export class ArbitrationService {
   public rates: { [key: string]: number } = {};
 
