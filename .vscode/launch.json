@@ -7,29 +7,38 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Arbitration Service",
-      "program": "${workspaceRoot}/bin/arbitrationService.js",
+      "name": "Launch Post Service",
+      "program": "${workspaceRoot}/bin/postService.js",
       "protocol": "inspector" // ES6 proxy support.
     },
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Arbitration Admin",
-      "program": "${workspaceRoot}/bin/arbitrationAdmin.js",
+      "name": "Launch Post Broadcast 3002",
+      "program": "${workspaceRoot}/bin/postBroadcast.js",
+      "env": {
+        "PORT": "3002"
+      },
       "protocol": "inspector" // ES6 proxy support.
     },
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Conversion Client",
-      "program": "${workspaceRoot}/bin/conversionClient.js",
+      "name": "Launch Post Broadcast 3003",
+      "program": "${workspaceRoot}/bin/postBroadcast.js",
+      "env": {
+        "PORT": "3003"
+      },
       "protocol": "inspector" // ES6 proxy support.
     },
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Conversion Service",
-      "program": "${workspaceRoot}/bin/conversionService.js",
+      "name": "Launch Static Server 3001",
+      "program": "${workspaceRoot}/bin/staticServer.js",
+      "env":{
+        "PORT": "3001"
+      },
       "protocol": "inspector" // ES6 proxy support.
     },
     {

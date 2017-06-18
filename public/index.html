@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8' />
+
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' />
+</head>
+
+<body>
+  <article class='container'>
+    <h1 id='port'></h1>
+
+    <pre id='events'>Loading...</pre>
+  </article>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.slim.js'></script>
+
+  <script>
+    const portElem = document.getElementById('port')
+    const eventsElem = document.getElementById('events')
+
+    const port = Math.random() > 0.5 ? 3002 : 3003
+    const socket = io(`http://localhost:${port}`)
+
+    portElem.innerHTML = port
+    eventsElem.innerHTML = new Date()
+
+    socket.on('postCreated', data => {
+      eventsElem.innerHTML += `\n\n${JSON.stringify(data)}`
+    })
+  </script>
+</body>
+
+</html>

@@ -1,38 +1,48 @@
 // tslint:disable:max-classes-per-file
 
 declare module "cote" {
+    /**
+     * Flux standard action.
+     */
+    export interface IAction {
+        type: string;
+
+        payload?: any;
+    }
+
     export interface IProps {
         key: string;
+
         name: string;
     }
 
     export class Publisher {
-        constructor({ key, name }: IProps)
+        constructor(props: IProps)
 
-        public publish({ type }: { type: string }): void;
+        public publish(action: IAction): void;
     }
 
     export class Requester {
-        constructor({ key, name }: IProps)
+        constructor(props: IProps)
 
-        public send({ type }: { type: string }): Promise<any>;
+        public send(action: IAction): Promise<any>;
     }
 
     export class Responder {
-        constructor({ key, name }: IProps)
+        constructor(props: IProps)
 
         public on(
             type: string,
-            onRequest: (data: any) => Promise<any>,
+            onRequest: (action: IAction) => Promise<any>,
         ): void;
     }
 
     export class Subscriber {
-        constructor({ key, name }: IProps)
+        constructor(props: IProps)
 
         public on(
             type: string,
-            onEvent: (data: any) => void,
+            onEvent: (action: IAction) => void,
         ): void;
     }
 }
