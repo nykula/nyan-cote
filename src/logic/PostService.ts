@@ -1,8 +1,8 @@
 import { Publisher } from "../utils/Publisher/Publisher";
-import { SubscriberInjector } from "../utils/Publisher/SubscriberInjector";
+import { PublisherInjector } from "../utils/Publisher/PublisherInjector";
 import { PostBroadcast } from "./PostBroadcast";
 
-@SubscriberInjector()
+@PublisherInjector()
 export class PostService {
   @Publisher()
   public postBroadcast: PostBroadcast;

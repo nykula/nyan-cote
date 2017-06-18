@@ -3,10 +3,10 @@ import { getClassName } from "../getClassName";
 import { activateRequester, getRequesters } from "./Requester";
 
 /**
- * Injects a responder into a class decorated with `@ResponderInjector()` for
+ * Injects a requester into a class decorated with `@RequesterInjector()` for
  * every its property decorated with `@Requester()`.
  */
-export function ResponderInjector() {
+export function RequesterInjector() {
   return <T extends { new (...args: any[]): {} }>(constructor: T) => {
     return class extends constructor {
       public static displayName = getClassName(constructor);
