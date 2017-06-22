@@ -6,9 +6,16 @@ processes discover each other and comunicate behind the scenes.
 
 ## Usage
 
-### Compare and contrast with ES6 `cote` examples
+### See `cote` docs first
 
-https://github.com/dashersw/cote#components-reference
+- https://github.com/dashersw/cote#components-reference
+
+
+### Install `nyan-cote`
+
+```bash
+yarn add nyan-cote
+```
 
 ### Enable decorators in tsconfig.json
 
@@ -22,28 +29,62 @@ https://github.com/dashersw/cote#components-reference
 ### Create a requester
 
 ```typescript
+// src/example/randomRequester.ts
+
 import { Requester, RequesterInjector } from 'nyan-cote';
 
 @RequesterInjector()
 class RandomRequester {
   @Requester()
-  public randomService: RandomResponder;
+  public randomResponder: RandomResponder;
 
   constructor() {
     setInterval(async () => {
       const val = Math.floor(Math.random() * 10);
-      const response = await this.randomService.randomRequest({ val });
+      const response = await this.randomResponder.randomRequest({ val });
       console.log('sending', val, 'response', response);
     }, 5000);
   }
 }
 
-new RandomRequester();
+export default new RandomRequester();
+```
+
+Equivalent without `nyan-cote`:
+
+```typescript
+// src/example/randomRequester.cote.ts
+
+import { Requester } from 'cote';
+
+class RandomRequester {
+  public requester = new Requester({
+    name: 'Requester--RandomResponder',
+    key: 'RandomResponder'
+  });
+
+  constructor() {
+    setInterval(async () => {
+      const val = Math.floor(Math.random() * 10);
+
+      const { payload } = await this.requester.send({
+        type: 'randomRequest',
+        payload: { val }
+      });
+
+      console.log('sending', val, 'response', payload);
+    }, 5000);
+  }
+}
+
+export default new RandomRequester();
 ```
 
 ### Create a responder
 
 ```typescript
+// src/example/randomResponder.ts
+
 import { RequestHandler, Responder } from 'nyan-cote';
 
 @Responder()
@@ -56,12 +97,43 @@ class RandomResponder {
   }
 }
 
-new RandomResponder();
+export default new RandomResponder();
+```
+
+Equivalent without `nyan-cote`:
+
+```typescript
+// src/example/randomResponder.cote.ts
+
+import { Responder } from 'nyan-cote';
+
+class RandomResponder {
+  public responder = new Responder({
+    name: 'Responder--RandomResponder',
+    key: 'RandomResponder'
+  });
+
+  constructor() {
+    this.responder.on('randomRequest', ({ payload }) => {
+      return this.randomRequest(payload);
+    });
+  }
+
+  public async randomRequest({ val }: { val: number }) {
+    const answer = Math.floor(Math.random() * 10);
+    console.log('request', val, 'answering with', answer);
+    return answer;
+  }
+}
+
+export default new RandomResponder();
 ```
 
 ### Create a publisher
 
 ```typescript
+// src/example/randomPublisher.ts
+
 import { Publisher, PublisherInjector } from 'nyan-cote';
 
 @PublisherInjector()
@@ -78,12 +150,42 @@ class RandomPublisher {
   }
 }
 
-new RandomPublisher();
+export default new RandomPublisher();
+```
+
+Equivalent without `nyan-cote`:
+
+```typescript
+// src/example/randomPublisher.cote.ts
+
+import { Publisher } from 'cote';
+
+class RandomPublisher {
+  public publisher = new Publisher({
+    name: 'Publisher--RandomSubscriber',
+    key: 'RandomSubscriber'
+  });
+
+  constructor() {
+    setInterval(() => {
+      const val = Math.floor(Math.random() * 1000);
+      console.log('emitting', val);
+      this.publisher.publish('randomUpdate', {
+        type: 'randomUpdate',
+        payload: { val }
+      });
+    }, 3000);
+  }
+}
+
+export default new RandomPublisher();
 ```
 
 ### Create a subscriber
 
 ```typescript
+// src/example/randomSubscriber.ts
+
 import { EventHandler, Subscriber } from 'nyan-cote';
 
 @Subscriber()
@@ -94,7 +196,34 @@ class RandomSubscriber {
   }
 }
 
-new RandomSubscriber();
+export default new RandomSubscriber();
+```
+
+Equivalent without `nyan-cote`:
+
+```typescript
+// src/example/randomSubscriber.cote.ts
+
+import { Subscriber } from 'cote';
+
+class RandomSubscriber {
+  public subscriber = new Subscriber({
+    name: 'Subscriber--RandomSubscriber',
+    key: 'RandomSubscriber'
+  });
+
+  constructor() {
+    this.subscriber.on('randomUpdate', ({ payload }) => {
+      this.randomUpdate(payload);
+    });
+  }
+
+  public randomUpdate({ val }: { val: number }) {
+    console.log('notified of', val);
+  }
+}
+
+export default new RandomSubscriber();
 ```
 
 ## Debug
