@@ -64,4 +64,5 @@ yarn.lock
 out/
 
 # Example from README
+bin/random*
 src/example/

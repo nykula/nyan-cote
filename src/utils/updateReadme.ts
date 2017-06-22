@@ -3,7 +3,7 @@ import { mkdirSync, readFileSync, rmdirSync, unlinkSync, writeFileSync } from "f
 import { resolve } from "path";
 
 class UpdateReadme {
-  public exp = /```typescript([\s\S]+?)```/g;
+  public exp = /```(?:java|type)script([\s\S]+?)```/g;
   public readme = "";
   public filenames = [] as string[];
   public updatedExamples = [] as string[];
@@ -58,7 +58,12 @@ class UpdateReadme {
     let i = 0;
 
     const updatedReadme = this.readme.replace(this.exp, () => {
-      return "```typescript\n" + this.updatedExamples[i++] + "```";
+      if (this.filenames[i].endsWith(".js")) {
+        return "```javascript\n" + this.updatedExamples[i++] + "\n```";
+      } else {
+        // Tslint adds newline.
+        return "```typescript\n" + this.updatedExamples[i++] + "```";
+      }
     });
 
     writeFileSync(this.projectRoot + "/README.md", updatedReadme, "utf-8");

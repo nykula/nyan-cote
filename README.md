@@ -2,14 +2,13 @@
 
 Lets you write `cote` microservices with type safety, code completion and less
 naming boilerplate. You call a method on your TypeScript class instance;
-processes discover each other and comunicate behind the scenes.
+processes discover each other and communicate behind the scenes.
 
 ## Usage
 
 ### See `cote` docs first
 
 - https://github.com/dashersw/cote#components-reference
-
 
 ### Install `nyan-cote`
 
@@ -28,13 +27,15 @@ yarn add nyan-cote
 
 ### Create a requester
 
+With `nyan-cote`:
+
 ```typescript
-// src/example/randomRequester.ts
+// src/example/RandomRequester.ts
 
 import { Requester, RequesterInjector } from "nyan-cote";
 
 @RequesterInjector()
-class RandomRequester {
+export class RandomRequester {
   @Requester()
   public randomResponder: RandomResponder;
 
@@ -46,18 +47,23 @@ class RandomRequester {
     }, 5000);
   }
 }
+```
 
-export default new RandomRequester();
+```javascript
+// bin/randomRequester.js
+
+const { RandomRequester } = require('../out/example/RandomRequester')
+new RandomRequester()
 ```
 
 Equivalent without `nyan-cote`:
 
 ```typescript
-// src/example/randomRequester.cote.ts
+// src/example/RandomRequester.cote.ts
 
 import { Requester } from "cote";
 
-class RandomRequester {
+export class RandomRequester {
   public requester = new Requester({
     key: "RandomResponder",
     name: "Requester--RandomResponder",
@@ -76,19 +82,26 @@ class RandomRequester {
     }, 5000);
   }
 }
+```
 
-export default new RandomRequester();
+```javascript
+// bin/randomRequester.cote.js
+
+const { RandomRequester } = require('../out/example/RandomRequester.cote')
+new RandomRequester()
 ```
 
 ### Create a responder
 
+With `nyan-cote`:
+
 ```typescript
-// src/example/randomResponder.ts
+// src/example/RandomResponder.ts
 
 import { RequestHandler, Responder } from "nyan-cote";
 
 @Responder()
-class RandomResponder {
+export class RandomResponder {
   @RequestHandler()
   public async randomRequest({ val }: { val: number }) {
     const answer = Math.floor(Math.random() * 10);
@@ -96,18 +109,23 @@ class RandomResponder {
     return answer;
   }
 }
+```
 
-export default new RandomResponder();
+```javascript
+// bin/randomResponder.js
+
+const { RandomResponder } = require('../out/example/RandomResponder')
+new RandomResponder()
 ```
 
 Equivalent without `nyan-cote`:
 
 ```typescript
-// src/example/randomResponder.cote.ts
+// src/example/RandomResponder.cote.ts
 
 import { Responder } from "nyan-cote";
 
-class RandomResponder {
+export class RandomResponder {
   public responder = new Responder({
     key: "RandomResponder",
     name: "Responder--RandomResponder",
@@ -125,19 +143,26 @@ class RandomResponder {
     return answer;
   }
 }
+```
 
-export default new RandomResponder();
+```javascript
+// bin/randomResponder.cote.js
+
+const { RandomResponder } = require('../out/example/RandomResponder.cote')
+new RandomResponder()
 ```
 
 ### Create a publisher
 
+With `nyan-cote`:
+
 ```typescript
-// src/example/randomPublisher.ts
+// src/example/RandomPublisher.ts
 
 import { Publisher, PublisherInjector } from "nyan-cote";
 
 @PublisherInjector()
-class RandomPublisher {
+export class RandomPublisher {
   @Publisher()
   public randomSubscriber: RandomSubscriber;
 
@@ -149,18 +174,23 @@ class RandomPublisher {
     }, 3000);
   }
 }
+```
 
-export default new RandomPublisher();
+```javascript
+// bin/randomPublisher.js
+
+const { RandomPublisher } = require('../out/example/RandomPublisher')
+new RandomPublisher()
 ```
 
 Equivalent without `nyan-cote`:
 
 ```typescript
-// src/example/randomPublisher.cote.ts
+// src/example/RandomPublisher.cote.ts
 
 import { Publisher } from "cote";
 
-class RandomPublisher {
+export class RandomPublisher {
   public publisher = new Publisher({
     key: "RandomSubscriber",
     name: "Publisher--RandomSubscriber",
@@ -177,36 +207,48 @@ class RandomPublisher {
     }, 3000);
   }
 }
+```
 
-export default new RandomPublisher();
+```javascript
+// bin/randomPublisher.cote.js
+
+const { RandomPublisher } = require('../out/example/RandomPublisher.cote')
+new RandomPublisher()
 ```
 
 ### Create a subscriber
 
+With `nyan-cote`:
+
 ```typescript
-// src/example/randomSubscriber.ts
+// src/example/RandomSubscriber.ts
 
 import { EventHandler, Subscriber } from "nyan-cote";
 
 @Subscriber()
-class RandomSubscriber {
+export class RandomSubscriber {
   @EventHandler()
   public randomUpdate({ val }: { val: number }) {
     console.log("notified of", val);
   }
 }
+```
 
-export default new RandomSubscriber();
+```javascript
+// bin/randomSubscriber.js
+
+const { RandomSubscriber } = require('../out/example/RandomSubscriber')
+new RandomSubscriber()
 ```
 
 Equivalent without `nyan-cote`:
 
 ```typescript
-// src/example/randomSubscriber.cote.ts
+// src/example/RandomSubscriber.cote.ts
 
 import { Subscriber } from "cote";
 
-class RandomSubscriber {
+export class RandomSubscriber {
   public subscriber = new Subscriber({
     key: "RandomSubscriber",
     name: "Subscriber--RandomSubscriber",
@@ -222,8 +264,13 @@ class RandomSubscriber {
     console.log("notified of", val);
   }
 }
+```
 
-export default new RandomSubscriber();
+```javascript
+// bin/randomSubscriber.cote.js
+
+const { RandomSubscriber } = require('../out/example/RandomSubscriber.cote')
+new RandomSubscriber()
 ```
 
 ## Debug
