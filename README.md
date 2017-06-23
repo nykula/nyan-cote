@@ -33,6 +33,7 @@ With `nyan-cote`:
 // src/example/RandomRequester.ts
 
 import { Requester, RequesterInjector } from "nyan-cote";
+import { RandomResponder } from "./RandomResponder";
 
 @RequesterInjector()
 export class RandomRequester {
@@ -123,7 +124,7 @@ Equivalent without `nyan-cote`:
 ```typescript
 // src/example/RandomResponder.cote.ts
 
-import { Responder } from "nyan-cote";
+import { Responder } from "cote";
 
 export class RandomResponder {
   public responder = new Responder({
@@ -132,7 +133,7 @@ export class RandomResponder {
   });
 
   constructor() {
-    this.responder.on("randomRequest", ({ payload }) => {
+    this.responder.on<{ val: number }>("randomRequest", ({ payload }) => {
       return this.randomRequest(payload);
     });
   }
@@ -160,6 +161,7 @@ With `nyan-cote`:
 // src/example/RandomPublisher.ts
 
 import { Publisher, PublisherInjector } from "nyan-cote";
+import { RandomSubscriber } from "./RandomSubscriber";
 
 @PublisherInjector()
 export class RandomPublisher {
@@ -255,7 +257,7 @@ export class RandomSubscriber {
   });
 
   constructor() {
-    this.subscriber.on("randomUpdate", ({ payload }) => {
+    this.subscriber.on<{ val: number }>("randomUpdate", ({ payload }) => {
       this.randomUpdate(payload);
     });
   }
@@ -293,8 +295,8 @@ Test, in terminal:
 
 ```bash
 yarn build
-yarn test
-yarn coverage
+yarn test // TODO
+yarn coverage // TODO
 ```
 
 Back end, in VS Code:

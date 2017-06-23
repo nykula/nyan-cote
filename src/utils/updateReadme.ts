@@ -7,11 +7,16 @@ class UpdateReadme {
   public readme = "";
   public filenames = [] as string[];
   public updatedExamples = [] as string[];
+  public package: {
+    main: string,
+    name: string,
+  };
 
   constructor(public projectRoot = resolve(__dirname + "/../..")) {
   }
 
   public run() {
+    this.readPackage();
     this.loadReadme();
     this.writeExampleFiles();
     this.lintFix();
@@ -20,17 +25,28 @@ class UpdateReadme {
     return true;
   }
 
+  public readPackage() {
+    const packageJson = readFileSync(this.projectRoot + "/package.json", "utf-8");
+    this.package = JSON.parse(packageJson);
+  }
+
   public loadReadme() {
     this.readme = readFileSync(this.projectRoot + "/README.md", "utf-8");
   }
 
   public writeExampleFiles() {
-    mkdirSync(this.projectRoot + "/src/example");
+    // mkdirSync(this.projectRoot + "/src/example");
+    const importExp = new RegExp(`from "${this.package.name}";`, "gi");
 
     for (const example of this.readme.match(this.exp)) {
-      const lines = example.split("\n").slice(1, -1);
+      let lines = example.split("\n").slice(1, -1);
+
+      lines = lines.map((line) => {
+        return line.replace(importExp, `from "${this.getMainPath()}";`);
+      });
+
       const filename = lines[0].replace(/^\/\/ /, "");
-      writeFileSync(this.projectRoot + "/" + filename, lines.join("\n"), "utf-8");
+      // writeFileSync(this.projectRoot + "/" + filename, lines.join("\n"), "utf-8");
       this.filenames.push(filename);
     }
   }
@@ -48,8 +64,11 @@ class UpdateReadme {
   }
 
   public readExamplesFromFiles() {
+    const importExp = new RegExp(`from "${this.getMainPath()}";`, "gi");
+
     for (const filename of this.filenames) {
-      const updatedExample = readFileSync(this.projectRoot + "/" + filename, "utf-8");
+      let updatedExample = readFileSync(this.projectRoot + "/" + filename, "utf-8");
+      updatedExample = updatedExample.replace(importExp, `from "${this.package.name}";`);
       this.updatedExamples.push(updatedExample);
     }
   }
@@ -67,6 +86,14 @@ class UpdateReadme {
     });
 
     writeFileSync(this.projectRoot + "/README.md", updatedReadme, "utf-8");
+  }
+
+  public getMainPath() {
+    return "..";
+
+    // May be useful:
+    // import { join, relative } from "path";
+    // return join(relative(__dirname, this.projectRoot), this.package.main);
   }
 }
 
