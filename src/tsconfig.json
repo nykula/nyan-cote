@@ -14,7 +14,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "outDir": "../out",
-    "rootDir": "."
+    "rootDir": ".",
+    "declaration": true
   },
   "exclude": [
     "../node_modules"
