@@ -1,5 +1,4 @@
 import * as cote from "cote";
-import { Action } from "../../domain/entities/Action";
 import { MetadataArray } from "../MetadataArray";
 
 export const EVENT_HANDLERS = Symbol("EVENT_HANDLERS");
@@ -20,7 +19,7 @@ export function EventHandler() {
 export function activateEventHandler(instance: any, propertyKey: string) {
   const subscriber: cote.Subscriber = instance.subscriber;
 
-  subscriber.on(propertyKey, (req: Action) => {
+  subscriber.on(propertyKey, (req: cote.Action<{}>) => {
     instance[propertyKey](req.payload);
   });
 }
