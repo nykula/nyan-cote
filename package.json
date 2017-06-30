@@ -1,6 +1,6 @@
 {
   "name": "nyan-cote",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Zero-configuration TypeScript microservices without boilerplate.",
   "main": "out/index.js",
   "types": "out/index.d.ts",
