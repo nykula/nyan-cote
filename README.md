@@ -133,7 +133,10 @@ export class RandomResponder {
   });
 
   constructor() {
-    this.responder.on<{ val: number }>("randomRequest", ({ payload }) => {
+    this.responder.on("randomRequest", ({ payload }: {
+      type: "randomRequest",
+      payload: { val: number },
+    }) => {
       return this.randomRequest(payload);
     });
   }
@@ -257,7 +260,10 @@ export class RandomSubscriber {
   });
 
   constructor() {
-    this.subscriber.on<{ val: number }>("randomUpdate", ({ payload }) => {
+    this.subscriber.on("randomUpdate", ({ payload }: {
+      type: "randomUpdate"
+      payload: { val: number },
+    }) => {
       this.randomUpdate(payload);
     });
   }

@@ -19,7 +19,7 @@
   "author": "makepost <makepost@firemail.cc>",
   "license": "MIT",
   "dependencies": {
-    "@types/cote": "^0.14.0",
+    "@types/cote": "^0.14.1",
     "cote": "^0.14.1",
     "reflect-metadata": "^0.1.10"
   },

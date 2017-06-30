@@ -1,4 +1,5 @@
 import * as cote from "cote";
+import { IAction } from "../IAction";
 import { MetadataArray } from "../MetadataArray";
 
 export const REQUEST_HANDLERS = Symbol("REQUEST_HANDLERS");
@@ -19,7 +20,7 @@ export function RequestHandler() {
 export function activateRequestHandler(instance: any, propertyKey: string) {
   const responder: cote.Responder = instance.responder;
 
-  responder.on(propertyKey, (req: cote.Action<{}>) => {
+  responder.on(propertyKey, (req: IAction<{}>) => {
     return instance[propertyKey](req.payload);
   });
 }
