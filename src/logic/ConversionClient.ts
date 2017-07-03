@@ -1,17 +1,17 @@
+import { Nyan } from "../utils/Nyan";
 import { Requester } from "../utils/Requester/Requester";
-import { RequesterInjector } from "../utils/Requester/RequesterInjector";
 import { ConversionService } from "./ConversionService";
 
-@RequesterInjector()
 export class ConversionClient {
   @Requester()
   public conversionService: ConversionService;
 
   public log = console.log;
 
+  public nyan = new Nyan(this);
+
   constructor() {
-    // Wait for injection.
-    setTimeout(async () => {
+    (async () => {
       let rate = 0;
 
       try {
@@ -26,6 +26,6 @@ export class ConversionClient {
       }
 
       this.log(rate);
-    });
+    })();
   }
 }

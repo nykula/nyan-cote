@@ -1,11 +1,12 @@
 import { Rate } from "../domain/entities/Rate";
+import { EventHandler } from "../index";
+import { Nyan } from "../utils/Nyan";
 import { RequestHandler } from "../utils/Responder/RequestHandler";
-import { Responder } from "../utils/Responder/Responder";
-import { ArbitrationSubscriber } from "./ArbitrationSubscriber";
 
-@Responder()
 export class ConversionService {
   public log = console.log;
+
+  public nyan = new Nyan(this);
 
   public rates: {
     [key: string]: number,
@@ -13,15 +14,6 @@ export class ConversionService {
     eurUsd: 1.10,
     usdEur: 0.91,
   };
-
-  public subscriber = new ArbitrationSubscriber();
-
-  constructor() {
-    // Wait for injection.
-    setTimeout(() => {
-      this.subscriber.onUpdateRate = this.updateRate;
-    });
-  }
 
   @RequestHandler()
   public async convert({ amount, from, to }: {
@@ -33,7 +25,8 @@ export class ConversionService {
     return amount * this.rates[`${from}${to}`];
   }
 
-  public updateRate = ({ currencies, rate }: Rate) => {
+  @EventHandler()
+  public updateRate({ currencies, rate }: Rate) {
     this.log({ currencies, rate });
     this.rates[currencies] = rate;
   }

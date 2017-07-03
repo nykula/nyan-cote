@@ -15,28 +15,6 @@ export function Requester() {
   };
 }
 
-export function activateRequester(instance: any, propertyKey: string) {
-  const constructor = Reflect.getMetadata("design:type", instance, propertyKey);
-
-  const requester = new cote.Requester({
-    key: getClassName(constructor),
-    name: `Requester--${getClassName(constructor)}`,
-  });
-
-  instance[propertyKey] = new Proxy({}, {
-    get: (x: any, name: string) => {
-      return (payload: any) => {
-        const action = {
-          payload,
-          type: name,
-        };
-
-        return requester.send(action);
-      };
-    },
-  });
-}
-
 export function getRequesters(instance: any) {
   return MetadataArray.get(REQUESTERS, instance);
 }

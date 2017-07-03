@@ -1,16 +1,15 @@
+import { Nyan } from "../utils/Nyan";
 import { Publisher } from "../utils/Publisher/Publisher";
-import { PublisherInjector } from "../utils/Publisher/PublisherInjector";
 import { RequestHandler } from "../utils/Responder/RequestHandler";
-import { Responder } from "../utils/Responder/Responder";
-import { ArbitrationSubscriber } from "./ArbitrationSubscriber";
+import { ConversionService } from "./ConversionService";
 
-@Responder()
-@PublisherInjector()
 export class ArbitrationService {
   public rates: { [key: string]: number } = {};
 
   @Publisher()
-  public arbitrationSubscriber: ArbitrationSubscriber;
+  public conversionService: ConversionService;
+
+  public nyan = new Nyan(this);
 
   @RequestHandler()
   public async updateRate({ currencies, rate }: {
@@ -18,7 +17,7 @@ export class ArbitrationService {
     rate: number,
   }) {
     this.rates[currencies] = rate;
-    this.arbitrationSubscriber.updateRate({ currencies, rate });
+    this.conversionService.updateRate({ currencies, rate });
     return "OK!";
   }
 }

@@ -17,14 +17,6 @@ export function RequestHandler() {
   };
 }
 
-export function activateRequestHandler(instance: any, propertyKey: string) {
-  const responder: cote.Responder = instance.responder;
-
-  responder.on(propertyKey, (req: IAction<{}>) => {
-    return instance[propertyKey](req.payload);
-  });
-}
-
 export function getRequestHandlers(instance: any) {
   return MetadataArray.get(REQUEST_HANDLERS, instance);
 }

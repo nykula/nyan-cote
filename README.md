@@ -32,11 +32,12 @@ With `nyan-cote`:
 ```typescript
 // src/example/RandomRequester.ts
 
-import { Requester, RequesterInjector } from "nyan-cote";
+import { Nyan, Requester } from "nyan-cote";
 import { RandomResponder } from "./RandomResponder";
 
-@RequesterInjector()
 export class RandomRequester {
+  public nyan = new Nyan(this);
+
   @Requester()
   public randomResponder: RandomResponder;
 
@@ -99,10 +100,11 @@ With `nyan-cote`:
 ```typescript
 // src/example/RandomResponder.ts
 
-import { RequestHandler, Responder } from "nyan-cote";
+import { Nyan, RequestHandler } from "nyan-cote";
 
-@Responder()
 export class RandomResponder {
+  public nyan = new Nyan(this);
+
   @RequestHandler()
   public async randomRequest({ val }: { val: number }) {
     const answer = Math.floor(Math.random() * 10);
@@ -163,11 +165,12 @@ With `nyan-cote`:
 ```typescript
 // src/example/RandomPublisher.ts
 
-import { Publisher, PublisherInjector } from "nyan-cote";
+import { Nyan, Publisher } from "nyan-cote";
 import { RandomSubscriber } from "./RandomSubscriber";
 
-@PublisherInjector()
 export class RandomPublisher {
+  public nyan = new Nyan(this);
+
   @Publisher()
   public randomSubscriber: RandomSubscriber;
 
@@ -228,10 +231,11 @@ With `nyan-cote`:
 ```typescript
 // src/example/RandomSubscriber.ts
 
-import { EventHandler, Subscriber } from "nyan-cote";
+import { EventHandler, Nyan } from "nyan-cote";
 
-@Subscriber()
 export class RandomSubscriber {
+  public nyan = new Nyan(this);
+
   @EventHandler()
   public randomUpdate({ val }: { val: number }) {
     console.log("notified of", val);

@@ -1,4 +1,6 @@
 import * as cote from "cote";
+import { Subscriber } from "cote";
+import { getClassName } from "../getClassName";
 import { IAction } from "../IAction";
 import { MetadataArray } from "../MetadataArray";
 
@@ -15,14 +17,6 @@ export function EventHandler() {
   ) => {
     MetadataArray.push(EVENT_HANDLERS, target, propertyKey);
   };
-}
-
-export function activateEventHandler(instance: any, propertyKey: string) {
-  const subscriber: cote.Subscriber = instance.subscriber;
-
-  subscriber.on(propertyKey, (req: IAction<{}>) => {
-    instance[propertyKey](req.payload);
-  });
 }
 
 export function getEventHandlers(instance: any) {

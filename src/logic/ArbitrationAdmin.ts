@@ -1,11 +1,12 @@
+import { Nyan } from "../utils/Nyan";
 import { Requester } from "../utils/Requester/Requester";
-import { RequesterInjector } from "../utils/Requester/RequesterInjector";
 import { ArbitrationService } from "./ArbitrationService";
 
-@RequesterInjector()
 export class ArbitrationAdmin {
   @Requester()
   public arbitrationService: ArbitrationService;
+
+  public nyan = new Nyan(this);
 
   constructor() {
     setInterval(() => {
