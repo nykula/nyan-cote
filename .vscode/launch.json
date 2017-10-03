@@ -10,6 +10,7 @@
       "name": "Test",
       "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
       "args": [
+        "--exit",
         "--bail",
         "-u",
         "tdd",

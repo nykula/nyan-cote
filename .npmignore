@@ -1,6 +1,7 @@
 .vscode/
 bin/
 src/
+src/app/
 out/updateReadme*
 .gitattributes
 .gitignore

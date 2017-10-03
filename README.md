@@ -194,6 +194,113 @@ src/domain/ComponentName.ts
 src/domain/ComponentNameType.ts
 ```
 
+## Unit testing
+
+### Install `mocha`
+
+```bash
+yarn add -D @types/mocha mocha source-map-support
+
+# Add this as a "test" script to package.json
+mocha --exit --bail -u tdd --timeout 999999 --colors -r source-map-support/register 'out/**/*.test.js'"
+```
+
+### Create a service test
+
+```typescript
+// src/app/Random/RandomService.test.ts
+
+import { EventHandler, Nyan, Requester } from "nyan-cote";
+import { RandomService } from "./RandomService";
+
+/**
+ * Example service test. RandomService has a responder and a publisher. Here
+ * we create a requester and a subscriber.
+ */
+describe("RandomService", () => {
+  let test: Test;
+
+  beforeEach(() => {
+    test = new Test();
+  });
+
+  it("gets one", async () => {
+    const value = await test.randomService.getOne(1, 2);
+    console.assert(value >= 0 && value <= 3);
+  });
+
+  it("gets one, failing if a or b falsy", async () => {
+    let error: Error | undefined;
+
+    try {
+      await test.randomService.getOne(0, 1);
+    } catch (_) {
+      error = _;
+    }
+    console.assert(!!error);
+
+    error = undefined;
+
+    try {
+      await test.randomService.getOne(1, 0);
+    } catch (_) {
+      error = _;
+    }
+
+    console.assert(!!error);
+  });
+
+  it("gets one, notifying controllers", async () => {
+    const results: Array<{
+      a: number,
+      b: number,
+      value: number,
+    }> = [];
+
+    /**
+     * Mock. Uses same class name, for service discovery. Nyan sees the
+     * decorator and binds a subscriber to every instance.
+     */
+    class RandomController {
+      public nyan = new Nyan(this);
+
+      private timesNotified = 0;
+
+      @EventHandler()
+      public notifyAllSubscribers(_: typeof results[0]) {
+        results.push(_);
+        console.assert(++this.timesNotified === 1);
+      }
+    }
+
+    const randomController = new RandomController();
+    const randomController1 = new RandomController();
+
+    await test.randomService.getOne(1, 2);
+
+    console.assert(results.length === 2);
+
+    for (const result of results) {
+      console.assert(result.a === 1 && result.b === 2 && result.value >= 0);
+    }
+
+    randomController.nyan.close();
+    randomController1.nyan.close();
+  });
+});
+
+// tslint:disable:max-classes-per-file
+class Test {
+  public instance = new RandomService();
+
+  public nyan = new Nyan(this);
+
+  // Talk through Cote instead of using the instance directly.
+  @Requester()
+  public randomService: RandomService;
+}
+```
+
 ## Develop
 
 Environment:
@@ -221,7 +328,7 @@ yarn build # This time also builds extracted examples.
 Test, in terminal:
 
 ```bash
-yarn test # TODO
+yarn test
 yarn coverage # TODO
 ```
 
