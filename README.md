@@ -25,116 +25,125 @@ yarn add nyan-cote
 }
 ```
 
-### Create a requester
+### Create a service
 
 ```typescript
-// src/example/RandomRequester.ts
+// src/app/Random/RandomService.ts
 
-import { Nyan, Requester } from "nyan-cote";
-import { RandomResponder } from "./RandomResponder";
+import { Nyan, Publisher, RequestHandler } from "nyan-cote";
+import { RandomController } from "./RandomController";
 
-export class RandomRequester {
+/**
+ * Example service. Responds with a random value on request. Publishes the
+ * value to all subscribers. You run this on as many computers in your network
+ * as you need.
+ */
+export class RandomService {
   public nyan = new Nyan(this);
 
-  @Requester()
-  public randomResponder: RandomResponder;
-
-  constructor() {
-    setInterval(async () => {
-      const val = Math.floor(Math.random() * 10);
-      const response = await this.randomResponder.randomRequest({ val });
-      console.log("sending", val, "response", response);
-    }, 5000);
-  }
-}
-```
-
-```javascript
-// bin/randomRequester.js
-
-const { RandomRequester } = require('../out/example/RandomRequester')
-new RandomRequester()
-```
-
-### Create a responder
-
-```typescript
-// src/example/RandomResponder.ts
-
-import { Nyan, RequestHandler } from "nyan-cote";
-
-export class RandomResponder {
-  public nyan = new Nyan(this);
+  @Publisher()
+  private randomController: RandomController;
 
   @RequestHandler()
-  public async randomRequest({ val }: { val: number }) {
-    const answer = Math.floor(Math.random() * 10);
-    console.log("request", val, "answering with", answer);
+  public async getOne({ value }: { value: number }) {
+    const answer = Math.floor(Math.random() * value);
+
+    console.log("request", value, "answering and publishing", answer);
+
+    this.randomController.notifyAllSubscribers({ value: answer });
+
     return answer;
   }
 }
 ```
 
 ```javascript
-// bin/randomResponder.js
+// bin/app/random.js
+// Service entry point. Start/stop this with, for example, PM2.
 
-const { RandomResponder } = require('../out/example/RandomResponder')
-new RandomResponder()
+const { RandomService } = require('../../out/app/Random/RandomService')
+const randomService = new RandomService()
+
+// Manual shutdown:
+// randomService.nyan.close()
 ```
 
-### Create a publisher
+### Expose it to users
 
 ```typescript
-// src/example/RandomPublisher.ts
+// src/app/Random/RandomController.ts
 
-import { Nyan, Publisher } from "nyan-cote";
-import { RandomSubscriber } from "./RandomSubscriber";
+import { Request, Response, Router } from "express";
+import { EventHandler, Nyan, Requester } from "nyan-cote";
+import { RandomService } from "./RandomService";
 
-export class RandomPublisher {
+/**
+ * Example controller. Behind the scenes, discovers RandomService instances in
+ * your network and queries them in a round-robin fashion. Lets remote users
+ * make HTTP requests and subscribe to all values the services generate.
+ */
+export class RandomController {
   public nyan = new Nyan(this);
 
-  @Publisher()
-  public randomSubscriber: RandomSubscriber;
+  @Requester()
+  public randomService: RandomService;
 
-  constructor() {
-    setInterval(() => {
-      const val = Math.floor(Math.random() * 1000);
-      console.log("emitting", val);
-      this.randomSubscriber.randomUpdate({ val });
-    }, 3000);
+  constructor(
+    private io: SocketIO.Server,
+    router: Router,
+  ) {
+    router.get("/random/:input", this.getOne);
   }
-}
-```
-
-```javascript
-// bin/randomPublisher.js
-
-const { RandomPublisher } = require('../out/example/RandomPublisher')
-new RandomPublisher()
-```
-
-### Create a subscriber
-
-```typescript
-// src/example/RandomSubscriber.ts
-
-import { EventHandler, Nyan } from "nyan-cote";
-
-export class RandomSubscriber {
-  public nyan = new Nyan(this);
 
   @EventHandler()
-  public randomUpdate({ val }: { val: number }) {
-    console.log("notified of", val);
+  public notifyAllSubscribers({ value }: { value: number }) {
+    this.io.emit(`notified of ${value}`);
+  }
+
+  private getOne = async (req: Request, res: Response) => {
+    const value = Number(req.params.input);
+
+    const response = await this.randomService.getOne({ value });
+
+    console.log("sending", value, "response", response);
+
+    res.send({ response });
   }
 }
 ```
 
-```javascript
-// bin/randomSubscriber.js
+```typescript
+// src/app/Api.ts
 
-const { RandomSubscriber } = require('../out/example/RandomSubscriber')
-new RandomSubscriber()
+import * as Express from "express";
+import * as SocketIO from "socket.io";
+import { RandomController } from "./Random/RandomController";
+
+/**
+ * Example API. Instantiates Express, Socket.IO and your controllers. Nyan is
+ * completely transparent at this level.
+ */
+export class Api {
+  public express: Express.Express = Express();
+
+  public io = SocketIO();
+
+  public randomController = new RandomController(this.io, this.express);
+}
+```
+
+```javascript
+// bin/app/api.js
+// API entry point. Start/stop this with, for example, PM2.
+
+const { Api } = require('../../out/app/Api')
+const api = new Api()
+const server = api.express.listen(8000)
+api.io.attach(server)
+
+// Manual shutdown:
+// server.close()
+// api.randomController.nyan.close()
 ```
 
 ## Develop

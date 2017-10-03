@@ -94,7 +94,7 @@ class UpdateReadme {
   }
 
   public getMainPath() {
-    return "..";
+    return "../..";
 
     // May be useful:
     // import { join, relative } from "path";
