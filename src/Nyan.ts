@@ -13,9 +13,9 @@ export class Nyan {
     [propertyKey: string]: Requester,
   };
 
-  public responder: Responder;
+  public responder: Responder | undefined;
 
-  public subscriber: Subscriber;
+  public subscriber: Subscriber | undefined;
 
   constructor(instance: any) {
     this.publishers = activatePublishers(instance);

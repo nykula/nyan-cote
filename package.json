@@ -5,30 +5,27 @@
   "main": "out/index.js",
   "types": "out/index.d.ts",
   "scripts": {
-    "build": "tsc -p src",
+    "build": "tsc",
     "coverage": "nyc -a --eager -n 'out/**/*.js' -n 'src/**/*.ts' -r json -r html yarn test",
-    "lint": "tslint 'src/**/*.ts'",
-    "lint-fix": "yarn lint -- --fix",
+    "format": "tslint --fix 'src/**/*.ts'",
     "test": "mocha --bail -u tdd --timeout 999999 --colors 'out/**/*.test.js'",
-    "update-readme": "node out/utils/updateReadme.js",
+    "readme": "node out/updateReadme.js",
     "prepublishOnly": "npm run build"
   },
-  "pre-commit": [
-    "lint"
-  ],
   "author": "makepost <makepost@firemail.cc>",
   "license": "MIT",
   "dependencies": {
-    "@types/cote": "^0.14.1",
-    "cote": "^0.14.1",
+    "@types/cote": "^0.14.2",
+    "cote": "^0.15.1",
     "reflect-metadata": "^0.1.10"
   },
   "devDependencies": {
-    "expect": "^1.20.2",
-    "mocha": "^3.4.2",
-    "nyc": "^11.0.2",
-    "pre-commit": "^1.2.2",
-    "tslint": "^5.4.3",
-    "typescript": "^2.3.4"
+    "@types/fs-extra": "^4.0.2",
+    "expect": "^21.2.1",
+    "fs-extra": "^4.0.2",
+    "mocha": "^4.0.0",
+    "nyc": "^11.2.1",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.3"
   }
 }

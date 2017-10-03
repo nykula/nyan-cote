@@ -1,6 +1,4 @@
-import * as cote from "cote";
 import "reflect-metadata";
-import { getClassName } from "../getClassName";
 import { MetadataArray } from "../MetadataArray";
 
 export const REQUESTERS = Symbol("REQUESTERS");

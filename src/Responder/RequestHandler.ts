@@ -1,5 +1,3 @@
-import * as cote from "cote";
-import { IAction } from "../IAction";
 import { MetadataArray } from "../MetadataArray";
 
 export const REQUEST_HANDLERS = Symbol("REQUEST_HANDLERS");
@@ -13,6 +11,7 @@ export function RequestHandler() {
     propertyKey: string,
     descriptor: TypedPropertyDescriptor<(...args: any[]) => Promise<any>>,
   ) => {
+    void descriptor; // Type check; value is not used.
     MetadataArray.push(REQUEST_HANDLERS, target, propertyKey);
   };
 }

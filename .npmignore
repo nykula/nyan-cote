@@ -1,9 +1,7 @@
 .vscode/
 bin/
 src/
-out/domain/
-out/logic/
-out/utils/updateReadme*
+out/updateReadme*
 .gitattributes
 .gitignore
 tslint.json

@@ -17,7 +17,7 @@ export function activateRequesters(instance: any) {
     });
 
     (instance as any)[propertyKey] = new Proxy({}, {
-      get: (x: any, methodName: string) => {
+      get: (_: any, methodName: string) => {
         return (payload: any) => {
           const action = {
             payload,

@@ -4,7 +4,7 @@ import { IAction } from "../IAction";
 import { getRequestHandlers } from "./RequestHandler";
 
 export function activateResponder(instance: any) {
-  let responder: Responder = null;
+  let responder: Responder | undefined;
   const key = getClassName(instance.constructor);
 
   for (const propertyKey of getRequestHandlers(instance)) {

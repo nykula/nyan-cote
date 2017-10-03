@@ -1,7 +1,3 @@
-import * as cote from "cote";
-import { Subscriber } from "cote";
-import { getClassName } from "../getClassName";
-import { IAction } from "../IAction";
 import { MetadataArray } from "../MetadataArray";
 
 export const EVENT_HANDLERS = Symbol("EVENT_HANDLERS");
@@ -15,6 +11,7 @@ export function EventHandler() {
     propertyKey: string,
     descriptor: TypedPropertyDescriptor<(...args: any[]) => void>,
   ) => {
+    void descriptor; // Type check; value is not used.
     MetadataArray.push(EVENT_HANDLERS, target, propertyKey);
   };
 }

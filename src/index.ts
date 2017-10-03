@@ -1,8 +1,8 @@
-import { Nyan } from "./utils/Nyan";
-import { Publisher } from "./utils/Publisher/Publisher";
-import { Requester } from "./utils/Requester/Requester";
-import { RequestHandler } from "./utils/Responder/RequestHandler";
-import { EventHandler } from "./utils/Subscriber/EventHandler";
+import { Nyan } from "./Nyan";
+import { Publisher } from "./Publisher/Publisher";
+import { Requester } from "./Requester/Requester";
+import { RequestHandler } from "./Responder/RequestHandler";
+import { EventHandler } from "./Subscriber/EventHandler";
 
 export {
   Nyan,

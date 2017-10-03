@@ -7,35 +7,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Arbitration Service",
-      "program": "${workspaceRoot}/bin/arbitrationService.js",
-      "protocol": "inspector" // ES6 proxy support.
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Launch Arbitration Admin",
-      "program": "${workspaceRoot}/bin/arbitrationAdmin.js",
-      "protocol": "inspector" // ES6 proxy support.
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Launch Conversion Client",
-      "program": "${workspaceRoot}/bin/conversionClient.js",
-      "protocol": "inspector" // ES6 proxy support.
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Launch Conversion Service",
-      "program": "${workspaceRoot}/bin/conversionService.js",
-      "protocol": "inspector" // ES6 proxy support.
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Mocha Tests",
+      "name": "Test",
       "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
       "args": [
         "--bail",
@@ -44,6 +16,8 @@
         "--timeout",
         "999999",
         "--colors",
+        "-r",
+        "source-map-support/register",
         "${workspaceRoot}/out/**/*.test.js"
       ],
       "internalConsoleOptions": "openOnSessionStart"

@@ -4,7 +4,7 @@ import { IAction } from "../IAction";
 import { getEventHandlers } from "./EventHandler";
 
 export function activateSubscriber(instance: any) {
-  let subscriber: Subscriber = null;
+  let subscriber: Subscriber | undefined;
   const key = getClassName(instance.constructor);
 
   for (const propertyKey of getEventHandlers(instance)) {

@@ -27,8 +27,6 @@ yarn add nyan-cote
 
 ### Create a requester
 
-With `nyan-cote`:
-
 ```typescript
 // src/example/RandomRequester.ts
 
@@ -58,44 +56,7 @@ const { RandomRequester } = require('../out/example/RandomRequester')
 new RandomRequester()
 ```
 
-Equivalent without `nyan-cote`:
-
-```typescript
-// src/example/RandomRequester.cote.ts
-
-import { Requester } from "cote";
-
-export class RandomRequester {
-  public requester = new Requester({
-    key: "RandomResponder",
-    name: "Requester--RandomResponder",
-  });
-
-  constructor() {
-    setInterval(async () => {
-      const val = Math.floor(Math.random() * 10);
-
-      const { payload } = await this.requester.send({
-        payload: { val },
-        type: "randomRequest",
-      });
-
-      console.log("sending", val, "response", payload);
-    }, 5000);
-  }
-}
-```
-
-```javascript
-// bin/randomRequester.cote.js
-
-const { RandomRequester } = require('../out/example/RandomRequester.cote')
-new RandomRequester()
-```
-
 ### Create a responder
-
-With `nyan-cote`:
 
 ```typescript
 // src/example/RandomResponder.ts
@@ -121,46 +82,7 @@ const { RandomResponder } = require('../out/example/RandomResponder')
 new RandomResponder()
 ```
 
-Equivalent without `nyan-cote`:
-
-```typescript
-// src/example/RandomResponder.cote.ts
-
-import { Responder } from "cote";
-
-export class RandomResponder {
-  public responder = new Responder({
-    key: "RandomResponder",
-    name: "Responder--RandomResponder",
-  });
-
-  constructor() {
-    this.responder.on("randomRequest", ({ payload }: {
-      type: "randomRequest",
-      payload: { val: number },
-    }) => {
-      return this.randomRequest(payload);
-    });
-  }
-
-  public async randomRequest({ val }: { val: number }) {
-    const answer = Math.floor(Math.random() * 10);
-    console.log("request", val, "answering with", answer);
-    return answer;
-  }
-}
-```
-
-```javascript
-// bin/randomResponder.cote.js
-
-const { RandomResponder } = require('../out/example/RandomResponder.cote')
-new RandomResponder()
-```
-
 ### Create a publisher
-
-With `nyan-cote`:
 
 ```typescript
 // src/example/RandomPublisher.ts
@@ -191,42 +113,7 @@ const { RandomPublisher } = require('../out/example/RandomPublisher')
 new RandomPublisher()
 ```
 
-Equivalent without `nyan-cote`:
-
-```typescript
-// src/example/RandomPublisher.cote.ts
-
-import { Publisher } from "cote";
-
-export class RandomPublisher {
-  public publisher = new Publisher({
-    key: "RandomSubscriber",
-    name: "Publisher--RandomSubscriber",
-  });
-
-  constructor() {
-    setInterval(() => {
-      const val = Math.floor(Math.random() * 1000);
-      console.log("emitting", val);
-      this.publisher.publish("randomUpdate", {
-        payload: { val },
-        type: "randomUpdate",
-      });
-    }, 3000);
-  }
-}
-```
-
-```javascript
-// bin/randomPublisher.cote.js
-
-const { RandomPublisher } = require('../out/example/RandomPublisher.cote')
-new RandomPublisher()
-```
-
 ### Create a subscriber
-
-With `nyan-cote`:
 
 ```typescript
 // src/example/RandomSubscriber.ts
@@ -250,42 +137,7 @@ const { RandomSubscriber } = require('../out/example/RandomSubscriber')
 new RandomSubscriber()
 ```
 
-Equivalent without `nyan-cote`:
-
-```typescript
-// src/example/RandomSubscriber.cote.ts
-
-import { Subscriber } from "cote";
-
-export class RandomSubscriber {
-  public subscriber = new Subscriber({
-    key: "RandomSubscriber",
-    name: "Subscriber--RandomSubscriber",
-  });
-
-  constructor() {
-    this.subscriber.on("randomUpdate", ({ payload }: {
-      type: "randomUpdate"
-      payload: { val: number },
-    }) => {
-      this.randomUpdate(payload);
-    });
-  }
-
-  public randomUpdate({ val }: { val: number }) {
-    console.log("notified of", val);
-  }
-}
-```
-
-```javascript
-// bin/randomSubscriber.cote.js
-
-const { RandomSubscriber } = require('../out/example/RandomSubscriber.cote')
-new RandomSubscriber()
-```
-
-## Debug
+## Develop
 
 Environment:
 
@@ -297,16 +149,23 @@ Install:
 
 ```bash
 git clone https://github.com/makepost/nyan-cote
-cd $_
+cd nyan-cote
 yarn
+yarn build
+```
+
+Extract examples:
+
+```bash
+EXTRACT=true yarn readme
+yarn build # This time also builds extracted examples.
 ```
 
 Test, in terminal:
 
 ```bash
-yarn build
-yarn test // TODO
-yarn coverage // TODO
+yarn test # TODO
+yarn coverage # TODO
 ```
 
 Back end, in VS Code:

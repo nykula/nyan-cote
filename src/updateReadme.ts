@@ -1,5 +1,6 @@
 import { spawnSync } from "child_process";
-import { mkdirSync, readFileSync, rmdirSync, unlinkSync, writeFileSync } from "fs";
+import { readFileSync } from "fs";
+import { outputFileSync } from "fs-extra";
 import { resolve } from "path";
 
 class UpdateReadme {
@@ -11,8 +12,9 @@ class UpdateReadme {
     main: string,
     name: string,
   };
+  public extractExampleFromReadme: boolean = JSON.parse(process.env.EXTRACT as string);
 
-  constructor(public projectRoot = resolve(__dirname + "/../..")) {
+  constructor(public projectRoot = resolve(__dirname + "/..")) {
   }
 
   public run() {
@@ -35,10 +37,9 @@ class UpdateReadme {
   }
 
   public writeExampleFiles() {
-    // mkdirSync(this.projectRoot + "/src/example");
     const importExp = new RegExp(`from "${this.package.name}";`, "gi");
 
-    for (const example of this.readme.match(this.exp)) {
+    for (const example of this.readme.match(this.exp) as RegExpMatchArray) {
       let lines = example.split("\n").slice(1, -1);
 
       lines = lines.map((line) => {
@@ -46,13 +47,17 @@ class UpdateReadme {
       });
 
       const filename = lines[0].replace(/^\/\/ /, "");
-      // writeFileSync(this.projectRoot + "/" + filename, lines.join("\n"), "utf-8");
+
+      if (this.extractExampleFromReadme) {
+        outputFileSync(this.projectRoot + "/" + filename, lines.join("\n"));
+      }
+
       this.filenames.push(filename);
     }
   }
 
   public lintFix() {
-    const { status } = spawnSync("yarn", ["lint-fix"], {
+    const { status } = spawnSync("yarn", ["format"], {
       cwd: this.projectRoot,
       encoding: "utf-8",
       stdio: ["inherit", "inherit", "inherit"],
@@ -85,7 +90,7 @@ class UpdateReadme {
       }
     });
 
-    writeFileSync(this.projectRoot + "/README.md", updatedReadme, "utf-8");
+    outputFileSync(this.projectRoot + "/README.md", updatedReadme);
   }
 
   public getMainPath() {
