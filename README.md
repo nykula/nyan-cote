@@ -146,6 +146,45 @@ api.io.attach(server)
 // api.randomController.nyan.close()
 ```
 
+### Organize your source
+
+Please don't separate by pattern:
+
+```
+# Not ok, navigation becomes awkward in large apps very quickly.
+package.json
+tsconfig.json
+bin/index.js
+bin/component-name.js
+src/controllers/ComponentName.ts
+src/entities/ComponentName.ts
+src/enums/ComponentNameType.ts
+src/seeds/ComponentNameSeed.ts
+src/services/ComponentNameService.ts
+src/tests/ComponentNameController.ts
+src/tests/ComponentNameSeed.ts
+src/tests/ComponentNameService.ts
+```
+
+Use vertical slices, separate by concern:
+
+```
+# Ok.
+package.json
+tsconfig.json
+bin/index.js
+bin/component-name.js
+src/app/Api.ts
+src/app/ComponentName/ComponentNameController.ts
+src/app/ComponentName/ComponentNameController.test.ts
+src/app/ComponentName/ComponentNameSeed.ts
+src/app/ComponentName/ComponentNameSeed.test.ts
+src/app/ComponentName/ComponentNameService.ts
+src/app/ComponentName/ComponentNameService.test.ts
+src/domain/ComponentName.ts
+src/domain/ComponentNameType.ts
+```
+
 ## Develop
 
 Environment:
