@@ -11,7 +11,7 @@ export function activateSubscriber(instance: any) {
     if (!subscriber) {
       subscriber = new Subscriber({
         key,
-        name: `Subscriber--${key}`,
+        name: `${key}-subscriber`,
       });
     }
 

@@ -13,7 +13,7 @@ export function activateRequesters(instance: any) {
 
     const requester = new Requester({
       key,
-      name: `Requester--${key}`,
+      name: `${getClassName(instance.constructor)}-requester--${key}`,
     });
 
     (instance as any)[propertyKey] = new Proxy({}, {
