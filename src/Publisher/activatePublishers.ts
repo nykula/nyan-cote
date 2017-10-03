@@ -13,7 +13,7 @@ export function activatePublishers(instance: any) {
 
     const publisher = new Publisher({
       key,
-      name: `${getClassName(instance.constructor)}-publisher--${key}`,
+      name: `${getClassName(instance.constructor)}-${propertyKey}`,
     });
 
     (instance as any)[propertyKey] = new Proxy({}, {

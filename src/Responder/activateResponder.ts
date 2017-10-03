@@ -11,7 +11,7 @@ export function activateResponder(instance: any) {
     if (!responder) {
       responder = new Responder({
         key,
-        name: `${key}-responder`,
+        name: `${key}--responder`,
       });
     }
 
