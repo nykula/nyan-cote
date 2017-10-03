@@ -1,5 +1,6 @@
 import { Requester } from "cote";
 import { getClassName } from "../getClassName";
+import { IAction } from "../IAction";
 import { getRequesters } from "./Requester";
 
 export function activateRequesters(instance: any) {
@@ -18,13 +19,19 @@ export function activateRequesters(instance: any) {
 
     (instance as any)[propertyKey] = new Proxy({}, {
       get: (_: any, methodName: string) => {
-        return (payload: any) => {
+        return async (...payload: any[]) => {
           const action = {
             payload,
             type: methodName,
           };
 
-          return requester.send(action);
+          const result: IAction<{}> = await requester.send(action);
+
+          if (result.error) {
+            return Promise.reject(result.payload);
+          }
+
+          return result.payload;
         };
       },
     });

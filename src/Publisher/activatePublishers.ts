@@ -18,7 +18,7 @@ export function activatePublishers(instance: any) {
 
     (instance as any)[propertyKey] = new Proxy({}, {
       get: (_: any, methodName: string) => {
-        return (payload: any) => {
+        return (...payload: any[]) => {
           const action = {
             payload,
             type: methodName,

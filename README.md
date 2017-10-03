@@ -45,14 +45,18 @@ export class RandomService {
   private randomController: RandomController;
 
   @RequestHandler()
-  public async getOne({ value }: { value: number }) {
-    const answer = Math.floor(Math.random() * value);
+  public async getOne(a: number, b: number) {
+    if (!a || !b) {
+      throw new Error("FalsyValue");
+    }
 
-    console.log("request", value, "answering and publishing", answer);
+    const value = Math.floor(Math.random() * (a + b));
 
-    this.randomController.notifyAllSubscribers({ value: answer });
+    console.log(`request (${a}, ${b}) answering and publishing ${value}`);
 
-    return answer;
+    this.randomController.notifyAllSubscribers({ a, b, value });
+
+    return value;
   }
 }
 ```
@@ -92,22 +96,27 @@ export class RandomController {
     private io: SocketIO.Server,
     router: Router,
   ) {
-    router.get("/random/:input", this.getOne);
+    router.get("/random/:a/:b", this.getOne);
   }
 
   @EventHandler()
-  public notifyAllSubscribers({ value }: { value: number }) {
-    this.io.emit(`notified of ${value}`);
+  public notifyAllSubscribers({ a, b, value }: { a: number, b: number, value: number }) {
+    this.io.emit(`notified of a=${a}, b=${b}, value=${value}`);
   }
 
   private getOne = async (req: Request, res: Response) => {
-    const value = Number(req.params.input);
+    const a = Number(req.params.a);
+    const b = Number(req.params.b);
 
-    const response = await this.randomService.getOne({ value });
+    try {
+      const response = await this.randomService.getOne(a, b);
 
-    console.log("sending", value, "response", response);
+      console.log(`sending (${a}, ${b}) response ${response}`);
 
-    res.send({ response });
+      res.send({ response });
+    } catch (error) {
+      res.status(500).send(error);
+    }
   }
 }
 ```

@@ -15,8 +15,8 @@ export function activateSubscriber(instance: any) {
       });
     }
 
-    subscriber.on(propertyKey, (req: IAction<{}>) => {
-      (instance as any)[propertyKey](req.payload);
+    subscriber.on(propertyKey, (req: IAction<any[]>) => {
+      (instance as any)[propertyKey](...req.payload);
     });
   }
 

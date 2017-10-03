@@ -15,8 +15,35 @@ export function activateResponder(instance: any) {
       });
     }
 
-    responder.on(propertyKey, (req: IAction<{}>) => {
-      return (instance as any)[propertyKey](req.payload);
+    responder.on(propertyKey, async (req: IAction<any[]>): Promise<IAction<{}>> => {
+      let error: Error | undefined;
+      let result: any;
+
+      try {
+        result = await (instance as any)[propertyKey](...req.payload);
+      } catch (_) {
+        error = _;
+      }
+
+      if (error) {
+        error = {
+          ...error,
+          message: error.message,
+          name: error.name,
+          stack: error.stack,
+        };
+
+        return {
+          error: true,
+          payload: error,
+          type: propertyKey,
+        };
+      }
+
+      return {
+        payload: result,
+        type: propertyKey,
+      };
     });
   }
 
