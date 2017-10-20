@@ -194,6 +194,10 @@ src/domain/ComponentName.ts
 src/domain/ComponentNameType.ts
 ```
 
+### Security
+
+Cote is for [internal communication](https://github.com/dashersw/cote/issues/53) between components of your app in a closed network. Put an HTTPS reverse proxy in front of your API. Set up a firewall so that remote users can only access the proxy, not the API or your services directly.
+
 ## Unit testing
 
 ### Install `mocha`
