@@ -42,7 +42,13 @@ export class RandomService {
   public nyan = new Nyan(this);
 
   @Publisher()
-  private randomController: RandomController;
+  private randomController!: RandomController;
+  // Exclamation mark: -> ^ <-
+  //
+  // Since TypeScript 2.7, one has to say explicitly that Nyan initializes
+  // this property, using a "definite assignment assertion".
+  //
+  // Don't need the exclamation mark with earlier versions.
 
   @RequestHandler()
   public async getOne(a: number, b: number) {
@@ -90,7 +96,13 @@ export class RandomController {
   public nyan = new Nyan(this);
 
   @Requester()
-  public randomService: RandomService;
+  public randomService!: RandomService;
+  // Exclamation: --> ^ <-
+  //
+  // Since TypeScript 2.7, one has to say explicitly that Nyan initializes
+  // this property, using a "definite assignment assertion".
+  //
+  // Don't need the exclamation mark with earlier versions.
 
   constructor(
     private io: SocketIO.Server,
@@ -133,7 +145,7 @@ import { RandomController } from "./Random/RandomController";
  * completely transparent at this level.
  */
 export class Api {
-  public express: Express.Express = Express();
+  public express = Express();
 
   public io = SocketIO();
 
@@ -227,6 +239,11 @@ describe("RandomService", () => {
   beforeEach(() => {
     test = new Test();
   });
+  
+  afterEach(() => {
+    test.instance.nyan.close();
+    test.nyan.close();
+  });
 
   it("gets one", async () => {
     const value = await test.randomService.getOne(1, 2);
@@ -301,7 +318,13 @@ class Test {
 
   // Talk through Cote instead of using the instance directly.
   @Requester()
-  public randomService: RandomService;
+  public randomService!: RandomService;
+  // Exclamation: --> ^ <-
+  //
+  // Since TypeScript 2.7, one has to say explicitly that Nyan initializes
+  // this property, using a "definite assignment assertion".
+  //
+  // Don't need the exclamation mark with earlier versions.
 }
 ```
 
